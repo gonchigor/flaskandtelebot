@@ -1,0 +1,46 @@
+{% extends 'basic.html' %}
+
+{%block main%}
+<div class='row'>
+    <div class='col-4'>
+        <h2>Погода</h2>
+        <p>
+            <strong>{{ weather.weather }}</strong><br>
+            Влажность {{ weather.humidity }}%<br>
+            Давление {{ weather.pressure }} кПа<br>
+            Облачность {{ weather.clouds }}%<br>
+            Температура {{ weather.temp }}&deg;C<br>
+            Восход {{ weather.sunrise }}<br>
+            Закат {{ weather.sunset }}<br>
+        </p>
+    </div>
+
+    <div class='col-8'>
+        <h2>Прогноз</h2>
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Время</th>
+                <th scope="col">Прогноз</th>
+                <th scope="col">Давление, кПа</th>
+                <th scope="col">Влажность</th>
+                <th scope="col">Облачность</th>
+                <th scope="col">Температура</th>
+            </tr>
+            </thead>
+            <tbody>
+                {%for cast in forecast %}
+                <tr>
+                    <td scope="row">{{ cast.time }}</td>
+                    <td>{{ cast.weather }}</td>
+                    <td>{{ cast.pressure }}</td>
+                    <td>{{ cast.humidity }}%</td>
+                    <td>{{ cast.clouds }}%</td>
+                    <td>{{ cast.temp }}&deg;C</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{%endblock%}

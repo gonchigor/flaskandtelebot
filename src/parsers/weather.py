@@ -31,8 +31,8 @@ class BaseWeather:
             'temp': data['main']['temp'],
             'temp_max': data['main']['temp_max'],
             'temp_min': data['main']['temp_min'],
-            'sunrise': datetime.fromtimestamp(data['sys']['sunrise']),
-            'sunset': datetime.fromtimestamp(data['sys']['sunset']),
+            'sunrise': datetime.fromtimestamp(data['sys']['sunrise']).strftime('%H:%M:%S'),
+            'sunset': datetime.fromtimestamp(data['sys']['sunset']).strftime('%H:%M:%S'),
         }
         return result
 
@@ -61,7 +61,7 @@ class BaseWeather:
             forecast_time = datetime.fromtimestamp(forecast['dt'])
             if forecast_time <= current_date + timedelta(days=1, hours=3):
                 weather = {
-                    'time': forecast_time,
+                    'time': forecast_time.strftime('%d.%m %H:%M'),
                     'weather': forecast['weather'][0]['description'],
                     'humidity': forecast['main']['humidity'],
                     'pressure': forecast['main']['pressure'],
