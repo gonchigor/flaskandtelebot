@@ -1,0 +1,22 @@
+{%extends 'basic.html'%}
+
+{%block main%}
+<table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Наименование иностранной валюты</th>
+            <th scope="col">Количество единиц иностранной валюты, буквенный код валюты</th>
+            <th scope="col">Официальный курс</th>
+          </tr>
+        </thead>
+        <tbody>
+            {%for abbr, rate in courses.items() %}
+            <tr>
+                <td scope="row">{{ rate.1 }}</td>
+                <td>{{ rate.0 }} {{ abbr }}</td>
+                <td>{{ rate.2 }}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+      </table>
+    {%endblock%}
