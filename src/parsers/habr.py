@@ -1,15 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
+from http.client import responses
 
-class BaseAfisha:
-    
-    def __init__(self):
-        r = requests.get(self.url)
-        text = r.text
-        self.soup = BeautifulSoup(text, 'lxml')
 
+class BaseHabr:
     def __init__(self):
-        self.afisha_url = 'https://afisha.tut.by/film/'
+        self.habr_url = "https://habr.com/top/monthly/"
         self._last_status = 0
 
     @property
@@ -17,26 +13,20 @@ class BaseAfisha:
         return self._last_status
     
     def get_html(self):
-        r = requests.get(self.afisha_url)
+        r = requests.get(self.habr_url)
         self._last_status = r.status_code
         if r.status_code == 200:
             return r.text
         return r.status_code + " " + responses[r.status_code]
 
     def _get_article(self):
-        films = self._get_all_articles()
-        for film in films:
-            yield film
+        soup = BeautifulSoup(self.get_html, 'lxml')
+        for h2 in soup.find_all('article'):
+            yield h2.find('h2').a.text
 
     def _get_all_articles(self):
         soup = BeautifulSoup(self.get_html(), 'lxml')
-        list_films = soup.find('div', id='events-block').find_all('ul', recursive=False)
-        films = []
-        for f in list_films:
-            for article in f.find_all('a', {'class': 'name'}):
-                films.append(article.text)
-        
-        return films
+        return [block.find('h2').a.text for block in soup.find_all('article')]
 
     def get_data(self, num=None):
         texts = self._get_all_articles()
@@ -45,4 +35,3 @@ class BaseAfisha:
         if len(texts) >= num:
             return texts[num - 1]
         return "Sorry! We don't have so many articles from habr"
-    
